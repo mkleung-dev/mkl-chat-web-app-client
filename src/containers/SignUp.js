@@ -9,6 +9,7 @@ import { Auth } from "aws-amplify";
 
 export default function Signup() {
     const [fields, handleFieldChange] = useFormFields({
+        username: "",
         email: "",
         password: "",
         confirmPassword: "",
@@ -21,6 +22,7 @@ export default function Signup() {
 
     function validateForm() {
         return (
+            fields.username.length > 0 &&
             fields.email.length > 0 &&
             fields.password.length > 0 &&
             fields.password === fields.confirmPassword
@@ -37,8 +39,11 @@ export default function Signup() {
 
         try {
             const newUser = await Auth.signUp({
-                username: fields.email,
-                password: fields.password
+                username: fields.username,
+                password: fields.password,
+                attributes: {
+                    email: fields.email
+                }
             });
             setIsLoading(false);
             setNewUser(newUser);
@@ -53,8 +58,8 @@ export default function Signup() {
         setIsLoading(true);
 
         try {
-            await Auth.confirmSignUp(fields.email, fields.confirmationCode);
-            await Auth.signIn(fields.email, fields.password);
+            await Auth.confirmSignUp(fields.username, fields.confirmationCode);
+            await Auth.signIn(fields.username, fields.password);
             userHasAuthenticated(true);
             history.push("/")
         } catch(e) {
@@ -80,6 +85,10 @@ export default function Signup() {
     function renderForm() {
         return (
             <form onSubmit={handleSubmit}>
+                <FormGroup controlId="username" bsSize="large">
+                    <FormLabel>User Name</FormLabel>
+                    <FormControl autoFocus type="text" onChange={handleFieldChange} value={fields.username} />
+                </FormGroup>
                 <FormGroup controlId="email" bsSize="large">
                     <FormLabel>Email</FormLabel>
                     <FormControl autoFocus type="email" onChange={handleFieldChange} value={fields.email} />

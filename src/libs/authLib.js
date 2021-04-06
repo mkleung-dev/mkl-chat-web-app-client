@@ -1,4 +1,5 @@
 import { useContext, createContext, useState } from "react";
+import { Auth } from "aws-amplify";
 
 export const AppContext = createContext(null);
 
@@ -28,6 +29,13 @@ export function useProviderAuth() {
     });
   };
 
+  const signUp = cb => {
+    return fakeAuth.signIn(() => {
+      setUser("user");
+      cb();
+    });
+  };
+
   const signOut = cb => {
     return fakeAuth.signOut(() => {
       setUser(null);
@@ -36,7 +44,7 @@ export function useProviderAuth() {
   };
 
   return {
-    user, signIn, signOut
+    user, signUp, signIn, signOut
   };
 }
 

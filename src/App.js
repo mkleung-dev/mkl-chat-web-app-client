@@ -23,10 +23,10 @@ function App() {
             <Nav className="mr-auto">
             </Nav>
             <Nav>
-              <Nav.Link>
+              <Nav.Link href="/login">
                 Login
               </Nav.Link>
-              <Nav.Link>
+              <Nav.Link href="/signup">
                 Signup
               </Nav.Link>
             </Nav>

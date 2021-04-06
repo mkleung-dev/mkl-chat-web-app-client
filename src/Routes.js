@@ -1,21 +1,22 @@
 import React from "react";
 import { BrowserRouter, Route, Switch, Link, Redirect, useHistory, useLocation } from "react-router-dom"
 import Login from "./containers/Login";
+import RecentChat from "./containers/RecentChat";
 import SignUp from "./containers/SignUp";
 import { useProviderAuth, useAuth } from "./libs/authLib";
 
 function AuthRoute({ children, ...rest }) {
-  const { pathName, search } = useLocation();
-    const auth = useProviderAuth();
-    return (
-      <Route {...rest}>
-        {auth.user ? (
-          children
-        ) : (
-          <Redirect to={`/login?redirect=${pathName}${search}`} />
-        )}
-      </Route>
-    );
+  const { pathname, search } = useLocation();
+  const auth = useProviderAuth();
+  return (
+    <Route {...rest}>
+      {auth.user ? (
+        children
+      ) : (
+        <Redirect to={`/login?redirect=${pathname}${search}`} />
+      )}
+    </Route>
+  );
 }
 
 function querystring(name, url = window.location.href) {
@@ -54,11 +55,8 @@ return (
     <UnauthRoute exact path="/signup">
       <SignUp />
     </UnauthRoute>
-    <AuthRoute exact path="/notes/new">
-     <Login />
-    </AuthRoute>
-    <AuthRoute exact path="/notes/:id">
-      <Login />
+    <AuthRoute exact path="/recent_chat">
+     <RecentChat />
     </AuthRoute>
     <Route>
       <Login />
